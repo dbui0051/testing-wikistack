@@ -2,25 +2,32 @@ const expect = require('chai').expect;
 const should = require('chai').should;
 const spies = require('chai-spies');
 const chai = require('chai');
+const Page = require('../models').Page
+const db = require('../models').db;
 chai.use(spies);
 
-// describe('A test category', function () {
-//   describe('A subcategory', function () {
-//     it('tests something');
-//     it('tests another aspect of the same thing');
-//   });
-//   describe('A different subcategory');
-// });
-// describe('A different category');
-
 describe('Page model', function () {
+  beforeEach(function(){
+  	db.sync({force: true})
+  })
 
   describe('Virtuals', function () {
+
+  	var page;
+	beforeEach(function () {
+	  page = Page.build({title: 'hello world', content: 'some content'})
+	});
+
     describe('route', function () {
-      it('returns the url_name prepended by "/wiki/"');
+      it('returns the url_name prepended by "/wiki/"', function(){
+      	page.urlTitle = 'hello_world'
+      	expect(page.route).to.equal('/wiki/hello_world')
+      });
     });
+
     describe('renderedContent', function () {
-      it('converts the markdown-formatted content into HTML');
+      xit('converts the markdown-formatted content into HTML');
+      //expect(page.renderedContent).to.equal();
     });
   });
 
