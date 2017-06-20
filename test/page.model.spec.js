@@ -10,6 +10,9 @@ describe('Page model', function () {
   beforeEach(function(){
   	db.sync({force: true})
   })
+   afterEach(function(){
+  	db.sync({force: true})
+  })
 
   describe('Virtuals', function () {
 
@@ -32,9 +35,37 @@ describe('Page model', function () {
   });
 
   describe('Class methods', function () {
+  before(function (done) {
+      Page.create({
+       title: 'foo',
+       content: 'bar',
+       tags: ['foo', 'bar']
+     })
+  .then(function () {
+    done();
+  })
+  .catch(done);
+  });
     describe('findByTag', function () {
-      it('gets pages with the search tag');
-      it('does not get pages without the search tag');
+      console.log(page.urlTitle)
+      it('gets pages with the search tag',function(done){
+        Page.findByTag('bar')
+        .then(function(pages){
+          expect(pages).to.have.lengthOf(1);
+          done();
+        })
+        .catch(done);
+      });
+
+      it('does not get pages without the search tag',function(done){
+         Page.findByTag('falfal')
+         .then (function(pages){
+           expect(pages).to.gave.lengthOf(0);
+           done();
+         })
+         .catch(done);
+
+      });
     });
   });
 
